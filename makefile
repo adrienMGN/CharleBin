@@ -9,5 +9,5 @@ test:
 	./vendor/bin/phpunit tst
 
 lint:
-	php -l ./lib;./vendor/bin/phpcs --extensions=php ./lib;./vendor/bin/phpmd ./lib ansi codesize,unusedcode,naming
+	php -l ./lib&&./vendor/bin/phpcs --extensions=php ./lib&&./vendor/bin/phpmd ./lib ansi codesize,unusedcode,naming
 

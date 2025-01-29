@@ -280,11 +280,13 @@ class Request
         if ($hasAcceptHeader) {
             $mediaTypeRanges = explode(',', trim($acceptHeader));
             foreach ($mediaTypeRanges as $mediaTypeRange) {
-                if (preg_match(
-                    '#(\*/\*|[a-z\-]+/[a-z\-+*]+(?:\s*;\s*[^q]\S*)*)(?:\s*;\s*q\s*=\s*(0(?:\.\d{0,3})|1(?:\.0{0,3})))?#',
-                    trim($mediaTypeRange),
-                    $match
-                )) {
+                if (
+                    preg_match(
+                        '#(\*/\*|[a-z\-]+/[a-z\-+*]+(?:\s*;\s*[^q]\S*)*)(?:\s*;\s*q\s*=\s*(0(?:\.\d{0,3})|1(?:\.0{0,3})))?#',
+                        trim($mediaTypeRange),
+                        $match
+                    )
+                ) {
                     if (!isset($match[2])) {
                         $match[2] = '1.0';
                     } else {
