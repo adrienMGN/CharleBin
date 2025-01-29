@@ -48,7 +48,7 @@ class PurgeLimiter extends AbstractPersistence
      *
      * @access public
      * @static
-     * @param Configuration $conf
+     * @param  Configuration $conf
      */
     public static function setConfiguration(Configuration $conf)
     {

@@ -71,9 +71,8 @@ class Filesystem extends AbstractData
     public function __construct(array $options)
     {
         // if given update the data directory
-        if (
-            is_array($options) &&
-            array_key_exists('dir', $options)
+        if (is_array($options)
+            && array_key_exists('dir', $options)
         ) {
             $this->_path = $options['dir'];
         }
@@ -109,9 +108,8 @@ class Filesystem extends AbstractData
      */
     public function read($pasteid)
     {
-        if (
-            !$this->exists($pasteid) ||
-            !$paste = $this->_get($this->_dataid2path($pasteid) . $pasteid . '.php')
+        if (!$this->exists($pasteid)
+            || !$paste = $this->_get($this->_dataid2path($pasteid) . $pasteid . '.php')
         ) {
             return false;
         }
@@ -311,7 +309,7 @@ class Filesystem extends AbstractData
             case 'purge_limiter':
                 $file = $this->_path . DIRECTORY_SEPARATOR . 'purge_limiter.php';
                 if (is_readable($file)) {
-                    require $file;
+                    include $file;
                     return $GLOBALS['purge_limiter'];
                 }
                 break;
@@ -327,7 +325,7 @@ class Filesystem extends AbstractData
             case 'traffic_limiter':
                 $file = $this->_path . DIRECTORY_SEPARATOR . 'traffic_limiter.php';
                 if (is_readable($file)) {
-                    require $file;
+                    include $file;
                     $this->_last_cache = $GLOBALS['traffic_limiter'];
                     if (array_key_exists($key, $this->_last_cache)) {
                         return $this->_last_cache[$key];
@@ -374,9 +372,8 @@ class Filesystem extends AbstractData
         foreach ($files as $pasteid) {
             if ($this->exists($pasteid)) {
                 $data = $this->read($pasteid);
-                if (
-                    array_key_exists('expire_date', $data['meta']) &&
-                    $data['meta']['expire_date'] < $time
+                if (array_key_exists('expire_date', $data['meta'])
+                    && $data['meta']['expire_date'] < $time
                 ) {
                     $pastes[] = $pasteid;
                     if (++$count >= $batchsize) {
@@ -487,10 +484,9 @@ class Filesystem extends AbstractData
                     LOCK_EX
                 );
             }
-            if (
-                $fileCreated === false ||
-                $writtenBytes === false ||
-                $writtenBytes < strlen(self::HTACCESS_LINE . PHP_EOL)
+            if ($fileCreated === false
+                || $writtenBytes === false
+                || $writtenBytes < strlen(self::HTACCESS_LINE . PHP_EOL)
             ) {
                 return false;
             }

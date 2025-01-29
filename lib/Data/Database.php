@@ -30,7 +30,7 @@ class Database extends AbstractData
      * instance of database connection
      *
      * @access private
-     * @var PDO
+     * @var    PDO
      */
     private $_db;
 
@@ -38,7 +38,7 @@ class Database extends AbstractData
      * table prefix
      *
      * @access private
-     * @var string
+     * @var    string
      */
     private $_prefix = '';
 
@@ -46,7 +46,7 @@ class Database extends AbstractData
      * database type
      *
      * @access private
-     * @var string
+     * @var    string
      */
     private $_type = '';
 
@@ -66,11 +66,10 @@ class Database extends AbstractData
         }
 
         // initialize the db connection with new options
-        if (
-            array_key_exists('dsn', $options) &&
-            array_key_exists('usr', $options) &&
-            array_key_exists('pwd', $options) &&
-            array_key_exists('opt', $options)
+        if (array_key_exists('dsn', $options)
+            && array_key_exists('usr', $options)
+            && array_key_exists('pwd', $options)
+            && array_key_exists('opt', $options)
         ) {
             // set default options
             $options['opt'][PDO::ATTR_ERRMODE]          = PDO::ERRMODE_EXCEPTION;
@@ -520,7 +519,7 @@ class Database extends AbstractData
      *
      * @access private
      * @param  string $sql
-     * @param  array $params
+     * @param  array  $params
      * @throws PDOException
      * @return bool
      */
@@ -547,8 +546,8 @@ class Database extends AbstractData
      *
      * @access private
      * @param  string $sql
-     * @param  array $params
-     * @param  bool $firstOnly if only the first row should be returned
+     * @param  array  $params
+     * @param  bool   $firstOnly if only the first row should be returned
      * @throws PDOException
      * @return array|false
      */

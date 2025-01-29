@@ -80,7 +80,7 @@ class I18n
      * @access public
      * @static
      * @param  string $messageId
-     * @param  mixed $args one or multiple parameters injected into placeholders
+     * @param  mixed  $args      one or multiple parameters injected into placeholders
      * @return string
      */
     public static function _($messageId)
@@ -94,7 +94,7 @@ class I18n
      * @access public
      * @static
      * @param  string $messageId
-     * @param  mixed $args one or multiple parameters injected into placeholders
+     * @param  mixed  $args      one or multiple parameters injected into placeholders
      * @return string
      */
     public static function translate($messageId)
@@ -164,9 +164,8 @@ class I18n
         $availableLanguages = self::getAvailableLanguages();
 
         // check if the lang cookie was set and that language exists
-        if (
-            array_key_exists('lang', $_COOKIE) &&
-            ($key = array_search($_COOKIE['lang'], $availableLanguages)) !== false
+        if (array_key_exists('lang', $_COOKIE)
+            && ($key = array_search($_COOKIE['lang'], $availableLanguages)) !== false
         ) {
             $match = $availableLanguages[$key];
         }
@@ -220,12 +219,11 @@ class I18n
         if (array_key_exists('HTTP_ACCEPT_LANGUAGE', $_SERVER)) {
             $languageRanges = explode(',', trim($_SERVER['HTTP_ACCEPT_LANGUAGE']));
             foreach ($languageRanges as $languageRange) {
-                if (
-                    preg_match(
-                        '/(\*|[a-zA-Z0-9]{1,8}(?:-[a-zA-Z0-9]{1,8})*)(?:\s*;\s*q\s*=\s*(0(?:\.\d{0,3})|1(?:\.0{0,3})))?/',
-                        trim($languageRange),
-                        $match
-                    )
+                if (preg_match(
+                    '/(\*|[a-zA-Z0-9]{1,8}(?:-[a-zA-Z0-9]{1,8})*)(?:\s*;\s*q\s*=\s*(0(?:\.\d{0,3})|1(?:\.0{0,3})))?/',
+                    trim($languageRange),
+                    $match
+                )
                 ) {
                     if (!isset($match[2])) {
                         $match[2] = '1.0';

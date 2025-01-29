@@ -47,7 +47,7 @@ class Request
      * Input stream to use for PUT parameter parsing
      *
      * @access private
-     * @var string
+     * @var    string
      */
     private static $_inputStream = 'php://input';
 
@@ -55,7 +55,7 @@ class Request
      * Operation to perform
      *
      * @access private
-     * @var string
+     * @var    string
      */
     private $_operation = 'view';
 
@@ -63,7 +63,7 @@ class Request
      * Request parameters
      *
      * @access private
-     * @var array
+     * @var    array
      */
     private $_params = [];
 
@@ -71,7 +71,7 @@ class Request
      * If we are in a JSON API context
      *
      * @access private
-     * @var bool
+     * @var    bool
      */
     private $_isJsonApi = false;
 
@@ -124,12 +124,11 @@ class Request
             default:
                 $this->_params = $_GET;
         }
-        if (
-            !array_key_exists('pasteid', $this->_params) &&
-            !array_key_exists('jsonld', $this->_params) &&
-            !array_key_exists('link', $this->_params) &&
-            array_key_exists('QUERY_STRING', $_SERVER) &&
-            !empty($_SERVER['QUERY_STRING'])
+        if (!array_key_exists('pasteid', $this->_params)
+            && !array_key_exists('jsonld', $this->_params)
+            && !array_key_exists('link', $this->_params)
+            && array_key_exists('QUERY_STRING', $_SERVER)
+            && !empty($_SERVER['QUERY_STRING'])
         ) {
             $this->_params['pasteid'] = $this->getPasteId();
         }
@@ -264,13 +263,12 @@ class Request
         $acceptHeader    = $hasAcceptHeader ? $_SERVER['HTTP_ACCEPT'] : '';
 
         // simple cases
-        if (
-            (array_key_exists('HTTP_X_REQUESTED_WITH', $_SERVER) &&
-                $_SERVER['HTTP_X_REQUESTED_WITH'] == 'JSONHttpRequest') ||
-            ($hasAcceptHeader &&
-                strpos($acceptHeader, self::MIME_JSON) !== false &&
-                strpos($acceptHeader, self::MIME_HTML) === false &&
-                strpos($acceptHeader, self::MIME_XHTML) === false)
+        if ((array_key_exists('HTTP_X_REQUESTED_WITH', $_SERVER)
+            && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'JSONHttpRequest')
+            || ($hasAcceptHeader
+            && strpos($acceptHeader, self::MIME_JSON) !== false
+            && strpos($acceptHeader, self::MIME_HTML) === false
+            && strpos($acceptHeader, self::MIME_XHTML) === false)
         ) {
             return true;
         }
@@ -280,12 +278,11 @@ class Request
         if ($hasAcceptHeader) {
             $mediaTypeRanges = explode(',', trim($acceptHeader));
             foreach ($mediaTypeRanges as $mediaTypeRange) {
-                if (
-                    preg_match(
-                        '#(\*/\*|[a-z\-]+/[a-z\-+*]+(?:\s*;\s*[^q]\S*)*)(?:\s*;\s*q\s*=\s*(0(?:\.\d{0,3})|1(?:\.0{0,3})))?#',
-                        trim($mediaTypeRange),
-                        $match
-                    )
+                if (preg_match(
+                    '#(\*/\*|[a-z\-]+/[a-z\-+*]+(?:\s*;\s*[^q]\S*)*)(?:\s*;\s*q\s*=\s*(0(?:\.\d{0,3})|1(?:\.0{0,3})))?#',
+                    trim($mediaTypeRange),
+                    $match
+                )
                 ) {
                     if (!isset($match[2])) {
                         $match[2] = '1.0';
@@ -304,9 +301,8 @@ class Request
                     continue;
                 }
                 foreach ($acceptedValues as $acceptedValue) {
-                    if (
-                        strpos($acceptedValue, self::MIME_HTML) === 0 ||
-                        strpos($acceptedValue, self::MIME_XHTML) === 0
+                    if (strpos($acceptedValue, self::MIME_HTML) === 0
+                        || strpos($acceptedValue, self::MIME_XHTML) === 0
                     ) {
                         return false;
                     } elseif (strpos($acceptedValue, self::MIME_JSON) === 0) {

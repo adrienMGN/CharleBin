@@ -422,13 +422,12 @@ class Controller
      * outputs requested JSON-LD context
      *
      * @access private
-     * @param string $type
+     * @param  string $type
      */
     private function _jsonld($type)
     {
-        if (
-            $type !== 'paste' && $type !== 'comment' &&
-            $type !== 'pastemeta' && $type !== 'commentmeta'
+        if ($type !== 'paste' && $type !== 'comment'
+            && $type !== 'pastemeta' && $type !== 'commentmeta'
         ) {
             $type = '';
         }
@@ -452,7 +451,7 @@ class Controller
      * proxies link to YOURLS, updates status or error with response
      *
      * @access private
-     * @param string $link
+     * @param  string $link
      */
     private function _yourlsproxy($link)
     {
@@ -468,9 +467,9 @@ class Controller
      * prepares JSON encoded status message
      *
      * @access private
-     * @param  int $status
+     * @param  int    $status
      * @param  string $message
-     * @param  array $other
+     * @param  array  $other
      */
     private function _return_message($status, $message, $other = [])
     {

@@ -45,7 +45,7 @@ class YourlsProxy
      * initializes and runs PrivateBin
      *
      * @access public
-     * @param string $link
+     * @param  string $link
      */
     public function __construct(Configuration $conf, $link)
     {
@@ -88,11 +88,10 @@ class YourlsProxy
             return;
         }
 
-        if (
-            !is_null($data) &&
-            array_key_exists('statusCode', $data) &&
-            $data['statusCode'] == 200 &&
-            array_key_exists('shorturl', $data)
+        if (!is_null($data)
+            && array_key_exists('statusCode', $data)
+            && $data['statusCode'] == 200
+            && array_key_exists('shorturl', $data)
         ) {
             $this->_url = $data['shorturl'];
         } else {

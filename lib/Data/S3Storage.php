@@ -78,7 +78,7 @@ class S3Storage extends AbstractData
      * instantiates a new S3 data backend.
      *
      * @access public
-     * @param array $options
+     * @param  array $options
      * @return
      */
     public function __construct(array $options)
@@ -117,7 +117,7 @@ class S3Storage extends AbstractData
      * returns all objects in the given prefix.
      *
      * @access private
-     * @param $prefix string with prefix
+     * @param  $prefix string with prefix
      * @return array all objects in the given prefix
      */
     private function _listAllObjects($prefix)
@@ -144,7 +144,7 @@ class S3Storage extends AbstractData
      * returns the S3 storage object key for $pasteid in $this->_bucket.
      *
      * @access private
-     * @param $pasteid string to get the key for
+     * @param  $pasteid string to get the key for
      * @return string
      */
     private function _getKey($pasteid)
@@ -161,8 +161,8 @@ class S3Storage extends AbstractData
      * as the S3 object's metadata except for the fields attachment, attachmentname
      * and salt.
      *
-     * @param $key string to store the payload under
-     * @param $payload array to store
+     * @param  $key     string to store the payload under
+     * @param  $payload array to store
      * @return bool true if successful, otherwise false.
      */
     private function _upload($key, $payload)
@@ -173,16 +173,20 @@ class S3Storage extends AbstractData
             $metadata[$k] = strval($v);
         }
         try {
-            $this->_client->putObject([
+            $this->_client->putObject(
+                [
                 'Bucket'      => $this->_bucket,
                 'Key'         => $key,
                 'Body'        => Json::encode($payload),
                 'ContentType' => 'application/json',
                 'Metadata'    => $metadata,
-            ]);
+                ]
+            );
         } catch (S3Exception $e) {
-            error_log('failed to upload ' . $key . ' to ' . $this->_bucket . ', ' .
-                trim(preg_replace('/\s\s+/', ' ', $e->getMessage())));
+            error_log(
+                'failed to upload ' . $key . ' to ' . $this->_bucket . ', ' .
+                trim(preg_replace('/\s\s+/', ' ', $e->getMessage()))
+            );
             return false;
         }
         return true;
@@ -206,15 +210,19 @@ class S3Storage extends AbstractData
     public function read($pasteid)
     {
         try {
-            $object = $this->_client->getObject([
+            $object = $this->_client->getObject(
+                [
                 'Bucket' => $this->_bucket,
                 'Key'    => $this->_getKey($pasteid),
-            ]);
+                ]
+            );
             $data = $object['Body']->getContents();
             return Json::decode($data);
         } catch (S3Exception $e) {
-            error_log('failed to read ' . $pasteid . ' from ' . $this->_bucket . ', ' .
-                trim(preg_replace('/\s\s+/', ' ', $e->getMessage())));
+            error_log(
+                'failed to read ' . $pasteid . ' from ' . $this->_bucket . ', ' .
+                trim(preg_replace('/\s\s+/', ' ', $e->getMessage()))
+            );
             return false;
         }
     }
@@ -230,10 +238,12 @@ class S3Storage extends AbstractData
             $comments = $this->_listAllObjects($name . '/discussion/');
             foreach ($comments as $comment) {
                 try {
-                    $this->_client->deleteObject([
+                    $this->_client->deleteObject(
+                        [
                         'Bucket' => $this->_bucket,
                         'Key'    => $comment['Key'],
-                    ]);
+                        ]
+                    );
                 } catch (S3Exception $e) {
                     // ignore if already deleted.
                 }
@@ -243,10 +253,12 @@ class S3Storage extends AbstractData
         }
 
         try {
-            $this->_client->deleteObject([
+            $this->_client->deleteObject(
+                [
                 'Bucket' => $this->_bucket,
                 'Key'    => $name,
-            ]);
+                ]
+            );
         } catch (S3Exception $e) {
             // ignore if already deleted
         }
@@ -282,10 +294,12 @@ class S3Storage extends AbstractData
         try {
             $entries = $this->_listAllObjects($prefix);
             foreach ($entries as $entry) {
-                $object = $this->_client->getObject([
+                $object = $this->_client->getObject(
+                    [
                     'Bucket' => $this->_bucket,
                     'Key'    => $entry['Key'],
-                ]);
+                    ]
+                );
                 $body             = JSON::decode($object['Body']->getContents());
                 $items            = explode('/', $entry['Key']);
                 $body['id']       = $items[3];
@@ -325,18 +339,22 @@ class S3Storage extends AbstractData
                 if (strlen($name) > strlen($path) && substr($name, strlen($path), 1) !== '/') {
                     continue;
                 }
-                $head = $this->_client->headObject([
+                $head = $this->_client->headObject(
+                    [
                     'Bucket' => $this->_bucket,
                     'Key'    => $name,
-                ]);
+                    ]
+                );
                 if ($head->get('Metadata') != null && array_key_exists('value', $head->get('Metadata'))) {
                     $value = $head->get('Metadata')['value'];
                     if (is_numeric($value) && intval($value) < $time) {
                         try {
-                            $this->_client->deleteObject([
+                            $this->_client->deleteObject(
+                                [
                                 'Bucket' => $this->_bucket,
                                 'Key'    => $name,
-                            ]);
+                                ]
+                            );
                         } catch (S3Exception $e) {
                             // deleted by another instance.
                         }
@@ -351,6 +369,7 @@ class S3Storage extends AbstractData
     /**
      * For S3, the value will also be stored in the metadata for the
      * namespaces traffic_limiter and purge_limiter.
+     *
      * @inheritDoc
      */
     public function setValue($value, $namespace, $key = '')
@@ -371,16 +390,20 @@ class S3Storage extends AbstractData
             $metadata['value'] = strval($value);
         }
         try {
-            $this->_client->putObject([
+            $this->_client->putObject(
+                [
                 'Bucket'      => $this->_bucket,
                 'Key'         => $key,
                 'Body'        => $value,
                 'ContentType' => 'application/json',
                 'Metadata'    => $metadata,
-            ]);
+                ]
+            );
         } catch (S3Exception $e) {
-            error_log('failed to set key ' . $key . ' to ' . $this->_bucket . ', ' .
-                trim(preg_replace('/\s\s+/', ' ', $e->getMessage())));
+            error_log(
+                'failed to set key ' . $key . ' to ' . $this->_bucket . ', ' .
+                trim(preg_replace('/\s\s+/', ' ', $e->getMessage()))
+            );
             return false;
         }
         return true;
@@ -403,10 +426,12 @@ class S3Storage extends AbstractData
         }
 
         try {
-            $object = $this->_client->getObject([
+            $object = $this->_client->getObject(
+                [
                 'Bucket' => $this->_bucket,
                 'Key'    => $key,
-            ]);
+                ]
+            );
             return $object['Body']->getContents();
         } catch (S3Exception $e) {
             return '';
@@ -427,10 +452,12 @@ class S3Storage extends AbstractData
 
         try {
             foreach ($this->_listAllObjects($prefix) as $object) {
-                $head = $this->_client->headObject([
+                $head = $this->_client->headObject(
+                    [
                     'Bucket' => $this->_bucket,
                     'Key'    => $object['Key'],
-                ]);
+                    ]
+                );
                 if ($head->get('Metadata') != null && array_key_exists('expire_date', $head->get('Metadata'))) {
                     $expire_at = intval($head->get('Metadata')['expire_date']);
                     if ($expire_at != 0 && $expire_at < $now) {

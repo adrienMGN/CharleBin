@@ -50,7 +50,7 @@ class Model
     /**
      * Get a paste, optionally a specific instance.
      *
-     * @param string $pasteId
+     * @param  string $pasteId
      * @return Paste
      */
     public function getPaste($pasteId = null)

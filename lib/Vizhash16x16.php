@@ -167,13 +167,14 @@ class Vizhash16x16
      * Gradient function
      *
      * taken from:
-     * @link   https://www.supportduweb.com/scripts_tutoriaux-code-source-41-gd-faire-un-degrade-en-php-gd-fonction-degrade-imagerie.html
+     *
+     * @link https://www.supportduweb.com/scripts_tutoriaux-code-source-41-gd-faire-un-degrade-en-php-gd-fonction-degrade-imagerie.html
      *
      * @access private
      * @param  resource $img
-     * @param  string $direction
-     * @param  array $color1
-     * @param  array $color2
+     * @param  string   $direction
+     * @param  array    $color1
+     * @param  array    $color2
      * @return resource
      */
     private function degrade($img, $direction, $color1, $color2)
@@ -208,8 +209,8 @@ class Vizhash16x16
      *
      * @access private
      * @param  resource $image
-     * @param  int $action
-     * @param  int $color
+     * @param  int      $action
+     * @param  int      $color
      */
     private function drawshape($image, $action, $color)
     {

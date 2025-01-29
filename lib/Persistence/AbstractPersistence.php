@@ -27,7 +27,7 @@ abstract class AbstractPersistence
      *
      * @access private
      * @static
-     * @var AbstractData
+     * @var    AbstractData
      */
     protected static $_store;
 
