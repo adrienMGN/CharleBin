@@ -1,34 +1,30 @@
 name: Makefile CI
-
-on:
-  push:
-    branches:
-      - "main"
-  pull_request:
-    branches:
-      - "main"
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      # Checkout the repository
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      # Install dependencies via Composer
-      - name: Install Composer dependencies
-        uses: php-actions/composer@v6
-
-      # Install project dependencies using the Makefile
-      - name: Run install target (composer install)
-        run: make install
-
-      # Run tests
-      - name: Run PHPUnit tests
-        run: make test
-
-      # Run linting checks
-      - name: Run lint checks
-        run: make lint
+331
+332 on:
+333   push:
+334     branches: [ "main" ]
+335   pull_request:
+336     branches: [ "main" ]
+337
+338 jobs:
+339   build:
+340     runs-on: ubuntu-latest
+341
+342     steps:
+343       - name: Checkout repository
+344         uses: actions/checkout@v4
+345
+346       - name: Set up PHP
+347         uses: shivammathur/setup-php@v2
+348         with:
+349           php-version: '8.2'
+350           tools: composer
+351
+352       - name: Install dependencies
+353         run: make install
+354
+355       - name: Run Linters
+356         run: make lint
+357
+358       - name: Run Tests
+359         run: make test
