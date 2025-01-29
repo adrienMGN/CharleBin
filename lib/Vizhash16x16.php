@@ -94,10 +94,10 @@ class Vizhash16x16
 
         // Then use these integers to drive the creation of an image.
         $image = imagecreatetruecolor($this->width, $this->height);
-
-        $r = $r0 = $this->getInt();
-        $g = $g0 = $this->getInt();
-        $b = $b0 = $this->getInt();
+// Correction des noms de variables pour éviter les confusions (exo 1 Linter)
+        $red = $red0 = $this->getInt();
+        $green = $green0 = $this->getInt();
+        $blue = $blue0 = $this->getInt();
 
         // First, create an image with a specific gradient background.
         $op = 'v';
