@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PrivateBin
  *
@@ -47,7 +48,7 @@ class Filter
             default:
                 $unit = rtrim($matches[2], 's');
         }
-        return I18n::_(array('%d ' . $unit, '%d ' . $unit . 's'), (int) $matches[1]);
+        return I18n::_(['%d ' . $unit, '%d ' . $unit . 's'], (int) $matches[1]);
     }
 
     /**
@@ -60,7 +61,7 @@ class Filter
      */
     public static function formatHumanReadableSize($size)
     {
-        $iec = array('B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB');
+        $iec = ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
         $i   = 0;
         while (($size / 1024) >= 1) {
             $size = $size / 1024;

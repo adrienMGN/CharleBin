@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PrivateBin
  *
@@ -26,21 +27,21 @@ class Request
      *
      * @const string
      */
-    const MIME_JSON = 'application/json';
+    public const MIME_JSON = 'application/json';
 
     /**
      * MIME type for HTML
      *
      * @const string
      */
-    const MIME_HTML = 'text/html';
+    public const MIME_HTML = 'text/html';
 
     /**
      * MIME type for XHTML
      *
      * @const string
      */
-    const MIME_XHTML = 'application/xhtml+xml';
+    public const MIME_XHTML = 'application/xhtml+xml';
 
     /**
      * Input stream to use for PUT parameter parsing
@@ -64,7 +65,7 @@ class Request
      * @access private
      * @var array
      */
-    private $_params = array();
+    private $_params = [];
 
     /**
      * If we are in a JSON API context
@@ -168,10 +169,10 @@ class Request
      */
     public function getData()
     {
-        $data = array(
+        $data = [
             'adata' => $this->getParam('adata'),
-        );
-        $required_keys = array('v', 'ct');
+        ];
+        $required_keys = ['v', 'ct'];
         $meta          = $this->getParam('meta');
         if (empty($meta)) {
             $required_keys[] = 'pasteid';
@@ -225,7 +226,7 @@ class Request
         return array_key_exists('REQUEST_URI', $_SERVER) ?
         htmlspecialchars(
             parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)
-            ) : '/';
+        ) : '/';
     }
 
     /**
@@ -275,13 +276,14 @@ class Request
         }
 
         // advanced case: media type negotiation
-        $mediaTypes = array();
+        $mediaTypes = [];
         if ($hasAcceptHeader) {
             $mediaTypeRanges = explode(',', trim($acceptHeader));
             foreach ($mediaTypeRanges as $mediaTypeRange) {
                 if (preg_match(
                     '#(\*/\*|[a-z\-]+/[a-z\-+*]+(?:\s*;\s*[^q]\S*)*)(?:\s*;\s*q\s*=\s*(0(?:\.\d{0,3})|1(?:\.0{0,3})))?#',
-                    trim($mediaTypeRange), $match
+                    trim($mediaTypeRange),
+                    $match
                 )) {
                     if (!isset($match[2])) {
                         $match[2] = '1.0';
@@ -289,7 +291,7 @@ class Request
                         $match[2] = (string) floatval($match[2]);
                     }
                     if (!isset($mediaTypes[$match[2]])) {
-                        $mediaTypes[$match[2]] = array();
+                        $mediaTypes[$match[2]] = [];
                     }
                     $mediaTypes[$match[2]][] = strtolower($match[1]);
                 }
