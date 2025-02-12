@@ -26,10 +26,6 @@ jobs:
       - name: Run Tests
         run: make test
 
-  cypress-run:
-    runs-on: ubuntu-latest
-    needs: build  # Ajoutez cette ligne si le job build est nécessaire avant cypress-run
-    steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -41,11 +37,8 @@ jobs:
       - name: Install dependencies
         run: npm install  # ou yarn install si vous utilisez Yarn
 
-      - name: Run Cypress tests in headless mode
-        uses: cypress-io/github-action@v2
-        with:
-          command: npm run test:e2e  # Remplacez par votre commande de test Cypress
-          start: npm start  # Remplacez par la commande pour démarrer votre application
-          wait-on: 'http://localhost:8080'  # Remplacez par l'URL de votre application
-          browser: chrome  # Vous pouvez spécifier le navigateur à utiliser
-          headless: true  # Active le mode headless
+      - name: Run Cypress tests
+        run: npx cypress run  # Exécute les tests en mode headless
+        env:
+          CYPRESS_baseUrl: http://localhost:8080  # Assurez-vous que votre application est accessible à cette URL
+
