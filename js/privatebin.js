@@ -13,20 +13,20 @@
 
 // global Base64, DOMPurify, FileReader, RawDeflate, history, navigator, prettyPrint, prettyPrintOne, showdown, kjua
 
-jQuery.fn.draghover = function() {
+jQuery.fn.draghover = function () {
     'use strict';
-    return this.each(function() {
+    return this.each(function () {
         let collection = $(),
             self = $(this);
 
-        self.on('dragenter', function(e) {
+        self.on('dragenter', function (e) {
             if (collection.length === 0) {
                 self.trigger('draghoverstart');
             }
             collection = collection.add(e.target);
         });
 
-        self.on('dragleave drop', function(e) {
+        self.on('dragleave drop', function (e) {
             collection = collection.not(e.target);
             if (collection.length === 0) {
                 self.trigger('draghoverend');
@@ -36,13 +36,13 @@ jQuery.fn.draghover = function() {
 };
 
 // main application start, called when DOM is fully loaded
-jQuery(document).ready(function() {
+jQuery(document).ready(function () {
     'use strict';
     // run main controller
     $.PrivateBin.Controller.init();
 });
 
-jQuery.PrivateBin = (function($, RawDeflate) {
+jQuery.PrivateBin = (function ($, RawDeflate) {
     'use strict';
 
     /**
@@ -57,7 +57,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
      *
      * @private
      */
-     const purifyHtmlConfig = {
+    const purifyHtmlConfig = {
         ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|magnet):)/i,
         SAFE_FOR_JQUERY: true,
         USE_PROFILES: {
@@ -70,7 +70,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
      *
      * @private
      */
-     const purifySvgConfig = {
+    const purifySvgConfig = {
         USE_PROFILES: {
             svg: true,
             svgFilters: true
@@ -99,8 +99,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @return {Array}|{string}
          */
-        this.getCipherData = function()
-        {
+        this.getCipherData = function () {
             return this.v === 1 ? this.data : [this.ct, this.adata];
         }
     }
@@ -124,8 +123,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @return {string}
          */
-        this.getFormat = function()
-        {
+        this.getFormat = function () {
             return this.v === 1 ? this.meta.formatter : this.adata[1];
         }
 
@@ -138,8 +136,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @return {string}
          */
-        this.getTimeToLive = function()
-        {
+        this.getTimeToLive = function () {
             return (this.v === 1 ? this.meta.remaining_time : this.meta.time_to_live) || 0;
         }
 
@@ -150,8 +147,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @return {bool}
          */
-        this.isBurnAfterReadingEnabled = function()
-        {
+        this.isBurnAfterReadingEnabled = function () {
             return (this.v === 1 ? this.meta.burnafterreading : this.adata[3]);
         }
 
@@ -162,8 +158,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @return {bool}
          */
-        this.isDiscussionEnabled = function()
-        {
+        this.isDiscussionEnabled = function () {
             return (this.v === 1 ? this.meta.opendiscussion : this.adata[2]);
         }
     }
@@ -187,8 +182,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @return {int}
          */
-        this.getCreated = function()
-        {
+        this.getCreated = function () {
             return this.meta[this.v === 1 ? 'postdate' : 'created'];
         }
 
@@ -199,8 +193,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @return {string}
          */
-        this.getIcon = function()
-        {
+        this.getIcon = function () {
             return this.meta[this.v === 1 ? 'vizhash' : 'icon'] || '';
         }
     }
@@ -321,27 +314,22 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {number} seconds
          * @return {Array}
          */
-        me.secondsToHuman = function(seconds)
-        {
+        me.secondsToHuman = function (seconds) {
             let v;
-            if (seconds < minute)
-            {
+            if (seconds < minute) {
                 v = Math.floor(seconds);
                 return [v, 'second'];
             }
-            if (seconds < hour)
-            {
+            if (seconds < hour) {
                 v = Math.floor(seconds / minute);
                 return [v, 'minute'];
             }
-            if (seconds < day)
-            {
+            if (seconds < day) {
                 v = Math.floor(seconds / hour);
                 return [v, 'hour'];
             }
             // If less than 2 months, display in days:
-            if (seconds < (2 * month))
-            {
+            if (seconds < (2 * month)) {
                 v = Math.floor(seconds / day);
                 return [v, 'day'];
             }
@@ -361,13 +349,11 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {String} duration
          * @return {number}
          */
-        me.durationToSeconds = function(duration)
-        {
-            let pieces   = duration.split(/(\D+)/),
-                factor   = pieces[0] || 0,
+        me.durationToSeconds = function (duration) {
+            let pieces = duration.split(/(\D+)/),
+                factor = pieces[0] || 0,
                 timespan = pieces[1] || pieces[0];
-            switch (timespan)
-            {
+            switch (timespan) {
                 case 'min':
                     return factor * minute;
                 case 'hour':
@@ -395,8 +381,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @param  {HTMLElement} element
          */
-        me.selectText = function(element)
-        {
+        me.selectText = function (element) {
             let range, selection;
 
             // MS
@@ -427,8 +412,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @param  {HTMLElement} element
          */
-        me.urls2links = function(element)
-        {
+        me.urls2links = function (element) {
             element.html(
                 DOMPurify.sanitize(
                     element.html().replace(
@@ -453,8 +437,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {...*} args - one or multiple parameters injected into format string
          * @return {string}
          */
-        me.sprintf = function()
-        {
+        me.sprintf = function () {
             const args = Array.prototype.slice.call(arguments);
             let format = args[0],
                 i = 1;
@@ -480,17 +463,15 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {string} cname - may not be empty
          * @return {string}
          */
-        me.getCookie = function(cname) {
+        me.getCookie = function (cname) {
             const name = cname + '=',
-                  ca   = document.cookie.split(';');
+                ca = document.cookie.split(';');
             for (let i = 0; i < ca.length; ++i) {
                 let c = ca[i];
-                while (c.charAt(0) === ' ')
-                {
+                while (c.charAt(0) === ' ') {
                     c = c.substring(1);
                 }
-                if (c.indexOf(name) === 0)
-                {
+                if (c.indexOf(name) === 0) {
                     return c.substring(name.length, c.length);
                 }
             }
@@ -505,8 +486,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @return {string}
          */
-        me.baseUri = function()
-        {
+        me.baseUri = function () {
             // check for cached version
             if (baseUri !== null) {
                 return baseUri;
@@ -524,8 +504,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {object} data
          * @return {Paste}
          */
-        me.PasteFactory = function(data)
-        {
+        me.PasteFactory = function (data) {
             return new Paste(data);
         };
 
@@ -537,8 +516,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {object} data
          * @return {Comment}
          */
-        me.CommentFactory = function(data)
-        {
+        me.CommentFactory = function (data) {
             return new Comment(data);
         };
 
@@ -551,9 +529,9 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {string} str
          * @return {string} escaped HTML
          */
-        me.htmlEntities = function(str) {
+        me.htmlEntities = function (str) {
             return String(str).replace(
-                /[&<>"'`=\/]/g, function(s) {
+                /[&<>"'`=\/]/g, function (s) {
                     return entityMap[s];
                 }
             );
@@ -568,8 +546,8 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {string|number} expirationDisplayStringOrSecondsToExpire - may not be empty
          * @return {Date}
          */
-        me.calculateExpirationDate = function(initialDate, expirationDisplayStringOrSecondsToExpire) {
-            let expirationDate      = new Date(initialDate),
+        me.calculateExpirationDate = function (initialDate, expirationDisplayStringOrSecondsToExpire) {
+            let expirationDate = new Date(initialDate),
                 secondsToExpiration = expirationDisplayStringOrSecondsToExpire;
             if (typeof expirationDisplayStringOrSecondsToExpire === 'string') {
                 secondsToExpiration = me.durationToSeconds(expirationDisplayStringOrSecondsToExpire);
@@ -592,8 +570,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   Helper.reset
          * @function
          */
-        me.reset = function()
-        {
+        me.reset = function () {
             baseUri = null;
         };
 
@@ -657,8 +634,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {...*} args - one or multiple parameters injected into placeholders
          * @return {string}
          */
-        me._ = function()
-        {
+        me._ = function () {
             return me.translate.apply(this, arguments);
         };
 
@@ -683,8 +659,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {...*} args - one or multiple parameters injected into placeholders
          * @return {string}
          */
-        me.translate = function()
-        {
+        me.translate = function () {
             // convert parameters to array
             let args = Array.prototype.slice.call(arguments),
                 messageId,
@@ -770,9 +745,9 @@ jQuery.PrivateBin = (function($, RawDeflate) {
                 // only allow tags/attributes we actually use in translations
                 output = DOMPurify.sanitize(
                     output, {
-                        ALLOWED_TAGS: ['a', 'i', 'span'],
-                        ALLOWED_ATTR: ['href', 'id']
-                    }
+                    ALLOWED_TAGS: ['a', 'i', 'span'],
+                    ALLOWED_ATTR: ['href', 'id']
+                }
                 );
             }
 
@@ -799,9 +774,8 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {int} n
          * @return {int} array key
          */
-        me.getPluralForm = function(n) {
-            switch (language)
-            {
+        me.getPluralForm = function (n) {
+            switch (language) {
                 case 'cs':
                 case 'sk':
                     return n === 1 ? 0 : (n >= 2 && n <= 4 ? 1 : 2);
@@ -820,7 +794,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
                 case 'lt':
                     return n % 10 === 1 && n % 100 !== 11 ? 0 : ((n % 10 >= 2 && n % 100 < 10 || n % 100 >= 20) ? 1 : 2);
                 case 'pl':
-                    return n === 1 ? 0 : (n % 10 >= 2 && n %10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2);
+                    return n === 1 ? 0 : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2);
                 case 'ru':
                 case 'uk':
                     return n % 10 === 1 && n % 100 !== 11 ? 0 : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2);
@@ -838,8 +812,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   I18n.loadTranslations
          * @function
          */
-        me.loadTranslations = function()
-        {
+        me.loadTranslations = function () {
             let newLanguage = Helper.getCookie('lang');
 
             // auto-select language based on browser settings
@@ -866,7 +839,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
             }
 
             // load strings from JSON
-            $.getJSON('i18n/' + newLanguage + '.json', function(data) {
+            $.getJSON('i18n/' + newLanguage + '.json', function (data) {
                 language = newLanguage;
                 translations = data;
                 $(document).triggerHandler(languageLoadedEvent);
@@ -882,8 +855,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   I18n.reset
          * @function
          */
-        me.reset = function(mockLanguage, mockTranslations)
-        {
+        me.reset = function (mockLanguage, mockTranslations) {
             language = mockLanguage || null;
             translations = mockTranslations || {};
         };
@@ -919,12 +891,10 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {string} message UTF-8 string
          * @return {string} UTF-16 string
          */
-        function utf8To16(message)
-        {
+        function utf8To16(message) {
             return decodeURIComponent(
                 message.split('').map(
-                    function(character)
-                    {
+                    function (character) {
                         return '%' + ('00' + character.charCodeAt(0).toString(16)).slice(-2);
                     }
                 ).join('')
@@ -943,12 +913,10 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {string} message UTF-16 string
          * @return {string} UTF-8 string
          */
-        function utf16To8(message)
-        {
+        function utf16To8(message) {
             return encodeURIComponent(message).replace(
                 /%([0-9A-F]{2})/g,
-                function (match, hexCharacter)
-                {
+                function (match, hexCharacter) {
                     return String.fromCharCode('0x' + hexCharacter);
                 }
             );
@@ -965,12 +933,11 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {ArrayBuffer} messageArray
          * @return {string} message
          */
-        function arraybufferToString(messageArray)
-        {
+        function arraybufferToString(messageArray) {
             const array = new Uint8Array(messageArray);
             let message = '',
-                i       = 0;
-            while(i < array.length) {
+                i = 0;
+            while (i < array.length) {
                 message += String.fromCharCode(array[i++]);
             }
             return message;
@@ -987,8 +954,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {string} message UTF-8 string
          * @return {Uint8Array} array
          */
-        function stringToArraybuffer(message)
-        {
+        function stringToArraybuffer(message) {
             const messageArray = new Uint8Array(message.length);
             for (let i = 0; i < message.length; ++i) {
                 messageArray[i] = message.charCodeAt(i);
@@ -1009,8 +975,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @throws {string}
          * @return {ArrayBuffer} data
          */
-        async function compress(message, mode, zlib)
-        {
+        async function compress(message, mode, zlib) {
             message = stringToArraybuffer(
                 utf16To8(message)
             );
@@ -1036,8 +1001,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @throws {string}
          * @return {string} message
          */
-        async function decompress(data, mode, zlib)
-        {
+        async function decompress(data, mode, zlib) {
             if (mode === 'zlib' || mode === 'none') {
                 if (mode === 'zlib') {
                     if (typeof zlib === 'undefined') {
@@ -1083,9 +1047,8 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @throws {string}
          * @return {string} random bytes
          */
-        function getRandomBytes(length)
-        {
-            let bytes       = '';
+        function getRandomBytes(length) {
+            let bytes = '';
             const byteArray = new Uint8Array(length);
             window.crypto.getRandomValues(byteArray);
             for (let i = 0; i < length; ++i) {
@@ -1106,14 +1069,13 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {array}  spec cryptographic specification
          * @return {CryptoKey} derived key
          */
-        async function deriveKey(key, password, spec)
-        {
+        async function deriveKey(key, password, spec) {
             let keyArray = stringToArraybuffer(key);
             if (password.length > 0) {
                 // version 1 pastes did append the passwords SHA-256 hash in hex
                 if (spec[7] === 'rawdeflate') {
                     let passwordBuffer = await window.crypto.subtle.digest(
-                        {name: 'SHA-256'},
+                        { name: 'SHA-256' },
                         stringToArraybuffer(
                             utf16To8(password)
                         )
@@ -1134,7 +1096,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
             const importedKey = await window.crypto.subtle.importKey(
                 'raw', // only 'raw' is allowed
                 keyArray,
-                {name: 'PBKDF2'}, // we use PBKDF2 for key derivation
+                { name: 'PBKDF2' }, // we use PBKDF2 for key derivation
                 false, // the key may not be exported
                 ['deriveKey'] // we may only use it for key derivation
             ).catch(Alert.showError);
@@ -1145,7 +1107,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
                     name: 'PBKDF2', // we use PBKDF2 for key derivation
                     salt: stringToArraybuffer(spec[1]), // salt used in HMAC
                     iterations: spec[2], // amount of iterations to apply
-                    hash: {name: 'SHA-256'} // can be "SHA-1", "SHA-256", "SHA-384" or "SHA-512"
+                    hash: { name: 'SHA-256' } // can be "SHA-1", "SHA-256", "SHA-384" or "SHA-512"
                 },
                 importedKey,
                 {
@@ -1167,8 +1129,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {array}  spec cryptographic specification
          * @return {object} crypto settings
          */
-        function cryptoSettings(adata, spec)
-        {
+        function cryptoSettings(adata, spec) {
             return {
                 name: 'AES-' + spec[6].toUpperCase(), // can be any supported AES algorithm ("AES-CTR", "AES-CBC", "AES-CMAC", "AES-GCM", "AES-CFB", "AES-KW", "ECDH", "DH" or "HMAC")
                 iv: stringToArraybuffer(spec[0]), // the initialization vector you used to encrypt
@@ -1189,16 +1150,15 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {array}  adata
          * @return {array}  encrypted message in base64 encoding & adata containing encryption spec
          */
-        me.cipher = async function(key, password, message, adata)
-        {
+        me.cipher = async function (key, password, message, adata) {
             let zlib = (await z);
             // AES in Galois Counter Mode, keysize 256 bit,
             // authentication tag 128 bit, 10000 iterations in key derivation
             const compression = (
-                    typeof zlib === 'undefined' ?
+                typeof zlib === 'undefined' ?
                     'none' : // client lacks support for WASM
                     ($('body').data('compression') || 'zlib')
-                ),
+            ),
                 spec = [
                     getRandomBytes(16), // initialization vector
                     getRandomBytes(8),  // salt
@@ -1246,8 +1206,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {string|object} data encrypted message
          * @return {string} decrypted message, empty if decryption failed
          */
-        me.decipher = async function(key, password, data)
-        {
+        me.decipher = async function (key, password, data) {
             let adataString, spec, cipherMessage, plaintext;
             let zlib = (await z);
             if (data instanceof Array) {
@@ -1289,13 +1248,13 @@ jQuery.PrivateBin = (function($, RawDeflate) {
                         atob(cipherMessage)
                     )
                 );
-            } catch(err) {
+            } catch (err) {
                 console.error(err);
                 return '';
             }
             try {
                 return await decompress(plaintext, spec[7], zlib);
-            } catch(err) {
+            } catch (err) {
                 Alert.showError(err);
                 return err;
             }
@@ -1311,8 +1270,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @throws {string}
          * @return {string} raw bytes
          */
-        me.getSymmetricKey = function()
-        {
+        me.getSymmetricKey = function () {
             return getRandomBytes(32);
         };
 
@@ -1324,8 +1282,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {string} input
          * @return {string} output
          */
-        me.base58encode = function(input)
-        {
+        me.base58encode = function (input) {
             return base58.encode(
                 stringToArraybuffer(input)
             );
@@ -1339,8 +1296,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {string} input
          * @return {string} output
          */
-        me.base58decode = function(input)
-        {
+        me.base58decode = function (input) {
             return arraybufferToString(
                 base58.decode(input)
             );
@@ -1370,8 +1326,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @return string
          */
-        me.getExpirationDefault = function()
-        {
+        me.getExpirationDefault = function () {
             return $('#pasteExpiration').val();
         };
 
@@ -1382,8 +1337,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @return string
          */
-        me.getFormatDefault = function()
-        {
+        me.getFormatDefault = function () {
             return $('#pasteFormatter').val();
         };
 
@@ -1397,8 +1351,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          *                            force a data reload. Default: true
          * @return string
          */
-        me.getPasteData = function(callback, useCache)
-        {
+        me.getPasteData = function (callback, useCache) {
             // use cache if possible/allowed
             if (useCache !== false && pasteData !== null) {
                 //execute callback
@@ -1441,8 +1394,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @return {string} unique identifier
          * @throws {string}
          */
-        me.getPasteId = function()
-        {
+        me.getPasteId = function () {
             const idRegEx = /^[a-z0-9]{16}$/;
 
             // return cached value
@@ -1478,8 +1430,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @return {bool}
          */
-        me.hasDeleteToken = function()
-        {
+        me.hasDeleteToken = function () {
             return window.location.search.indexOf('deletetoken') !== -1;
         }
 
@@ -1491,8 +1442,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @return {string|null} key
          * @throws {string}
          */
-        me.getPasteKey = function()
-        {
+        me.getPasteKey = function () {
             if (symmetricKey === null) {
                 let newKey = window.location.hash.substring(1);
                 if (newKey === '') {
@@ -1502,8 +1452,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
                 // Some web 2.0 services and redirectors add data AFTER the anchor
                 // (such as &utm_source=...). We will strip any additional data.
                 let ampersandPos = newKey.indexOf('&');
-                if (ampersandPos > -1)
-                {
+                if (ampersandPos > -1) {
                     newKey = newKey.substring(0, ampersandPos);
                 }
 
@@ -1512,7 +1461,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
                     // base58 encode strips NULL bytes at the beginning of the
                     // string, so we re-add them if necessary
                     symmetricKey = CryptTool.base58decode(newKey).padStart(32, '\u0000');
-                } catch(e) {
+                } catch (e) {
                     symmetricKey = newKey;
                 }
             }
@@ -1528,8 +1477,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {string} name - the name of the template
          * @return {jQuery}
          */
-        me.getTemplate = function(name)
-        {
+        me.getTemplate = function (name) {
             // find template
             let $element = $templates.find('#' + name + 'template').clone(true);
             // change ID to avoid collisions (one ID should really be unique)
@@ -1542,8 +1490,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   Model.reset
          * @function
          */
-        me.reset = function()
-        {
+        me.reset = function () {
             pasteData = $templates = id = symmetricKey = null;
         };
 
@@ -1555,8 +1502,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   Model.init
          * @function
          */
-        me.init = function()
-        {
+        me.init = function () {
             $templates = $('#templates');
         };
 
@@ -1584,8 +1530,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @param  {Event} event
          */
-        function historyChange(event)
-        {
+        function historyChange(event) {
             let currentLocation = Helper.baseUri();
             if (event.originalEvent.state === null && // no state object passed
                 event.target.location.href === currentLocation && // target location is home page
@@ -1604,8 +1549,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   UiHelper.reloadHome
          * @function
          */
-        me.reloadHome = function()
-        {
+        me.reloadHome = function () {
             window.location.href = Helper.baseUri();
         };
 
@@ -1618,10 +1562,9 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @param  {jQuery} $element The link hash to move to.
          */
-        me.isVisible = function($element)
-        {
-            let elementTop     = $element.offset().top,
-                viewportTop    = $(window).scrollTop(),
+        me.isVisible = function ($element) {
+            let elementTop = $element.offset().top,
+                viewportTop = $(window).scrollTop(),
                 viewportBottom = viewportTop + $(window).height();
             return elementTop > viewportTop && elementTop < viewportBottom;
         };
@@ -1637,8 +1580,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {string}           animationEffect   passed to jQuery .animate
          * @param  {function}         finishedCallback  function to call after animation finished
          */
-        me.scrollTo = function($element, animationDuration, animationEffect, finishedCallback)
-        {
+        me.scrollTo = function ($element, animationDuration, animationEffect, finishedCallback) {
             let $body = $('html, body'),
                 margin = 50,
                 callbackCalled = false,
@@ -1688,12 +1630,11 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @param  {string} state   (optional) state to mock
          */
-        me.mockHistoryChange = function(state)
-        {
+        me.mockHistoryChange = function (state) {
             if (typeof state === 'undefined') {
                 state = null;
             }
-            historyChange($.Event('popstate', {originalEvent: new PopStateEvent('popstate', {state: state}), target: window}));
+            historyChange($.Event('popstate', { originalEvent: new PopStateEvent('popstate', { state: state }), target: window }));
         };
 
         /**
@@ -1702,8 +1643,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   UiHelper.init
          * @function
          */
-        me.init = function()
-        {
+        me.init = function () {
             // update link to home page
             $('.reloadlink').prop('href', Helper.baseUri());
 
@@ -1747,8 +1687,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {string|array} args
          * @param  {string|null} icon - optional, icon
          */
-        function handleNotification(id, $element, args, icon)
-        {
+        function handleNotification(id, $element, args, icon) {
             // basic parsing/conversion of parameters
             if (typeof icon === 'undefined') {
                 icon = null;
@@ -1758,7 +1697,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
             } else if (typeof args === 'string') {
                 // convert string to array if needed
                 args = [args];
-            } else if (args  instanceof Error) {
+            } else if (args instanceof Error) {
                 // extract message into array if needed
                 args = [args.message];
             }
@@ -1824,8 +1763,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {string|null}  icon        optional, the icon to show,
          *                                    default: leave previous icon
          */
-        me.showStatus = function(message, icon)
-        {
+        me.showStatus = function (message, icon) {
             handleNotification(1, $statusMessage, message, icon);
         };
 
@@ -1840,11 +1778,10 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {string|null}  icon        optional, the icon to show, default:
          *                                    leave previous icon
          */
-        me.showWarning = function(message, icon)
-        {
+        me.showWarning = function (message, icon) {
             $errorMessage.find(':first')
-                         .removeClass(currentIcon[3])
-                         .addClass(currentIcon[2]);
+                .removeClass(currentIcon[3])
+                .addClass(currentIcon[2]);
             handleNotification(2, $errorMessage, message, icon);
         };
 
@@ -1859,8 +1796,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {string|null}  icon        optional, the icon to show, default:
          *                                    leave previous icon
          */
-        me.showError = function(message, icon)
-        {
+        me.showError = function (message, icon) {
             handleNotification(3, $errorMessage, message, icon);
         };
 
@@ -1873,8 +1809,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @param  {string|array} message     string, use an array for %s/%d options
          */
-        me.showRemaining = function(message)
-        {
+        me.showRemaining = function (message) {
             handleNotification(1, $remainingTime, message);
         };
 
@@ -1888,8 +1823,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {string|array|null} message      optional, use an array for %s/%d options, default: 'Loading…'
          * @param  {string|null}       icon         optional, the icon to show, default: leave previous icon
          */
-        me.showLoading = function(message, icon)
-        {
+        me.showLoading = function (message, icon) {
             // default message text
             if (typeof message === 'undefined') {
                 message = 'Loading…';
@@ -1907,8 +1841,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   Alert.hideLoading
          * @function
          */
-        me.hideLoading = function()
-        {
+        me.hideLoading = function () {
             $loadingIndicator.addClass('hidden');
 
             // hide loading cursor
@@ -1923,8 +1856,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   Alert.hideMessages
          * @function
          */
-        me.hideMessages = function()
-        {
+        me.hideMessages = function () {
             $statusMessage.addClass('hidden');
             $errorMessage.addClass('hidden');
         };
@@ -1947,8 +1879,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @param {function|null} newHandler
          */
-        me.setCustomHandler = function(newHandler)
-        {
+        me.setCustomHandler = function (newHandler) {
             customHandler = newHandler;
         };
 
@@ -1960,8 +1891,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   Alert.init
          * @function
          */
-        me.init = function()
-        {
+        me.init = function () {
             // hide "no javascript" error message
             $('#noscript').hide();
 
@@ -2003,28 +1933,27 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @private
          * @function
          */
-        function sendToShortener()
-        {
+        function sendToShortener() {
             if ($shortenButton.hasClass('buttondisabled')) {
                 return;
             }
             $.ajax({
                 type: 'GET',
                 url: `${$shortenButton.data('shortener')}${encodeURIComponent($pasteUrl.attr('href'))}`,
-                headers: {'Accept': 'text/html, application/xhtml+xml, application/xml, application/json'},
+                headers: { 'Accept': 'text/html, application/xhtml+xml, application/xml, application/json' },
                 processData: false,
                 timeout: 10000,
                 xhrFields: {
                     withCredentials: false
                 },
-                success: function(response) {
+                success: function (response) {
                     let responseString = response;
                     if (typeof responseString === 'object') {
                         responseString = JSON.stringify(responseString);
                     }
                     if (typeof responseString === 'string' && responseString.length > 0) {
                         const shortUrlMatcher = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
-                        const shortUrl = (responseString.match(shortUrlMatcher) || []).sort(function(a, b) {
+                        const shortUrl = (responseString.match(shortUrlMatcher) || []).sort(function (a, b) {
                             return a.length - b.length;
                         })[0];
                         if (typeof shortUrl === 'string' && shortUrl.length > 0) {
@@ -2041,17 +1970,17 @@ jQuery.PrivateBin = (function($, RawDeflate) {
                     Alert.showError('Cannot parse response from URL shortener.');
                 }
             })
-            .fail(function(data, textStatus, errorThrown) {
-                console.error(textStatus, errorThrown);
-                // we don't know why it failed, could be CORS of the external
-                // server not setup properly, in which case we follow old
-                // behavior to open it in new tab
-                window.open(
-                    `${$shortenButton.data('shortener')}${encodeURIComponent($pasteUrl.attr('href'))}`,
-                    '_blank',
-                    'noopener, noreferrer'
-                );
-            });
+                .fail(function (data, textStatus, errorThrown) {
+                    console.error(textStatus, errorThrown);
+                    // we don't know why it failed, could be CORS of the external
+                    // server not setup properly, in which case we follow old
+                    // behavior to open it in new tab
+                    window.open(
+                        `${$shortenButton.data('shortener')}${encodeURIComponent($pasteUrl.attr('href'))}`,
+                        '_blank',
+                        'noopener, noreferrer'
+                    );
+                });
         }
 
         /**
@@ -2063,8 +1992,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   PasteStatus.pasteLinkClick
          * @function
          */
-        function pasteLinkClick()
-        {
+        function pasteLinkClick() {
             // check if location is (already) shown in URL bar
             if (window.location.href === $pasteUrl.attr('href')) {
                 // if so we need to load link by reloading the current site
@@ -2080,8 +2008,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {string} url
          * @param  {string} deleteUrl
          */
-        me.createPasteNotification = function(url, deleteUrl)
-        {
+        me.createPasteNotification = function (url, deleteUrl) {
             I18n._(
                 $('#pastelink'),
                 'Your paste is <a id="pasteurl" href="%s">%s</a> <span id="copyhint">(Hit [Ctrl]+[c] to copy)</span>',
@@ -2112,8 +2039,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @param {Paste} paste
          */
-        me.showRemainingTime = function(paste)
-        {
+        me.showRemainingTime = function (paste) {
             if (paste.isBurnAfterReadingEnabled()) {
                 // display paste "for your eyes only" if it is deleted
 
@@ -2147,8 +2073,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name PasteStatus.hideMessages
          * @function
          */
-        me.hideMessages = function()
-        {
+        me.hideMessages = function () {
             $remainingTime.addClass('hidden');
             $pasteSuccess.addClass('hidden');
         };
@@ -2161,8 +2086,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   PasteStatus.init
          * @function
          */
-        me.init = function()
-        {
+        me.init = function () {
             $pasteSuccess = $('#pastesuccess');
             // $pasteUrl is saved in me.createPasteNotification() after creation
             $remainingTime = $('#remainingtime');
@@ -2197,8 +2121,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @param  {Event} event
          */
-        function submitPasswordModal(event)
-        {
+        function submitPasswordModal(event) {
             event.preventDefault();
 
             // get input
@@ -2216,8 +2139,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name Prompt.requestPassword
          * @function
          */
-        me.requestPassword = function()
-        {
+        me.requestPassword = function () {
             // show new bootstrap method (if available)
             if ($passwordModal.length !== 0) {
                 $passwordModal.modal({
@@ -2249,8 +2171,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @return {string}
          */
-        me.getPassword = function()
-        {
+        me.getPassword = function () {
             return password;
         };
 
@@ -2260,8 +2181,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   Prompt.reset
          * @function
          */
-        me.reset = function()
-        {
+        me.reset = function () {
             // reset internal
             password = '';
 
@@ -2277,8 +2197,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   Prompt.init
          * @function
          */
-        me.init = function()
-        {
+        me.init = function () {
             $passwordDecrypt = $('#passworddecrypt');
             $passwordForm = $('#passwordform');
             $passwordModal = $('#passwordmodal');
@@ -2321,15 +2240,14 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {Event} event
          * @this $message (but not used, so it is jQuery-free, possibly faster)
          */
-        function supportTabs(event)
-        {
+        function supportTabs(event) {
             const keyCode = event.keyCode || event.which;
             // tab was pressed
             if (keyCode === 9) {
                 // get caret position & selection
-                const val   = this.value,
-                      start = this.selectionStart,
-                      end   = this.selectionEnd;
+                const val = this.value,
+                    start = this.selectionStart,
+                    end = this.selectionEnd;
                 // set textarea value to: text before caret + tab + text after caret
                 this.value = val.substring(0, start) + '\t' + val.substring(end);
                 // put caret at right position again
@@ -2346,14 +2264,13 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @param  {Event} event - optional
          */
-        function viewEditor(event)
-        {
+        function viewEditor(event) {
             // toggle buttons
             $messageEdit.addClass('active');
             $messagePreview.removeClass('active');
 
-            $('#messageedit').attr('aria-selected','true');
-            $('#messagepreview').attr('aria-selected','false');
+            $('#messageedit').attr('aria-selected', 'true');
+            $('#messagepreview').attr('aria-selected', 'false');
 
             PasteViewer.hide();
 
@@ -2378,14 +2295,13 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @param  {Event} event
          */
-        function viewPreview(event)
-        {
+        function viewPreview(event) {
             // toggle buttons
             $messageEdit.removeClass('active');
             $messagePreview.addClass('active');
 
-            $('#messageedit').attr('aria-selected','false');
-            $('#messagepreview').attr('aria-selected','true');
+            $('#messageedit').attr('aria-selected', 'false');
+            $('#messagepreview').attr('aria-selected', 'true');
 
             // hide input as now preview is shown
             $message.addClass('hidden');
@@ -2416,8 +2332,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   Editor.isPreview
          * @function
          */
-        me.isPreview = function()
-        {
+        me.isPreview = function () {
             return isPreview;
         };
 
@@ -2427,8 +2342,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   Editor.resetInput
          * @function
          */
-        me.resetInput = function()
-        {
+        me.resetInput = function () {
             // go back to input
             if (isPreview) {
                 viewEditor();
@@ -2444,8 +2358,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   Editor.show
          * @function
          */
-        me.show = function()
-        {
+        me.show = function () {
             $message.removeClass('hidden');
             $editorTabs.removeClass('hidden');
         };
@@ -2456,8 +2369,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   Editor.hide
          * @function
          */
-        me.hide = function()
-        {
+        me.hide = function () {
             $message.addClass('hidden');
             $editorTabs.addClass('hidden');
         };
@@ -2468,8 +2380,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   Editor.focusInput
          * @function
          */
-        me.focusInput = function()
-        {
+        me.focusInput = function () {
             $message.focus();
         };
 
@@ -2480,8 +2391,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @param {string} newText
          */
-        me.setText = function(newText)
-        {
+        me.setText = function (newText) {
             $message.val(newText);
         };
 
@@ -2492,8 +2402,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @return {string}
          */
-        me.getText = function()
-        {
+        me.getText = function () {
             return $message.val();
         };
 
@@ -2505,8 +2414,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   Editor.init
          * @function
          */
-        me.init = function()
-        {
+        me.init = function () {
             $editorTabs = $('#editorTabs');
             $message = $('#message');
 
@@ -2547,8 +2455,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @private
          * @function
          */
-        function parsePaste()
-        {
+        function parsePaste() {
             // skip parsing if no text is given
             if (text === '') {
                 return;
@@ -2574,8 +2481,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
             } else {
                 if (format === 'syntaxhighlighting') {
                     // yes, this is really needed to initialize the environment
-                    if (typeof prettyPrint === 'function')
-                    {
+                    if (typeof prettyPrint === 'function') {
                         prettyPrint();
                     }
 
@@ -2602,8 +2508,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @private
          * @function
          */
-        function showPaste()
-        {
+        function showPaste() {
             // instead of "nothing" better display a placeholder
             if (text === '') {
                 $placeholder.removeClass('hidden');
@@ -2631,8 +2536,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @param {string} newFormat the new format
          */
-        me.setFormat = function(newFormat)
-        {
+        me.setFormat = function (newFormat) {
             // skip if there is no update
             if (format === newFormat) {
                 return;
@@ -2654,8 +2558,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @return {string}
          */
-        me.getFormat = function()
-        {
+        me.getFormat = function () {
             return format;
         };
 
@@ -2666,8 +2569,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @return {bool}
          */
-        me.isPrettyPrinted = function()
-        {
+        me.isPrettyPrinted = function () {
             return $prettyPrint.hasClass('prettyprinted');
         };
 
@@ -2678,8 +2580,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @param {string} newText the text to show
          */
-        me.setText = function(newText)
-        {
+        me.setText = function (newText) {
             if (text !== newText) {
                 text = newText;
                 isChanged = true;
@@ -2693,8 +2594,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @return {string}
          */
-        me.getText = function()
-        {
+        me.getText = function () {
             return text;
         };
 
@@ -2704,8 +2604,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   PasteViewer.run
          * @function
          */
-        me.run = function()
-        {
+        me.run = function () {
             if (isChanged) {
                 parsePaste();
                 isChanged = false;
@@ -2723,8 +2622,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   PasteViewer.hide
          * @function
          */
-        me.hide = function()
-        {
+        me.hide = function () {
             if (!isDisplayed) {
                 return;
             }
@@ -2745,8 +2643,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   PasteViewer.init
          * @function
          */
-        me.init = function()
-        {
+        me.init = function () {
             $placeholder = $('#placeholder');
             $plainText = $('#plaintext');
             $prettyMessage = $('#prettymessage');
@@ -2791,8 +2688,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param {string} data - mime type of attachment
          * @return {string} objectURL
          */
-         function getBlobUrl(data, mimeType)
-         {
+        function getBlobUrl(data, mimeType) {
             // Transform into a Blob
             const buf = new Uint8Array(data.length);
             for (let i = 0; i < data.length; ++i) {
@@ -2807,18 +2703,17 @@ jQuery.PrivateBin = (function($, RawDeflate) {
 
             // Get blob URL
             return window.URL.createObjectURL(blob);
-         }
+        }
 
-         /**
-         * sets the attachment but does not yet show it
-         *
-         * @name   AttachmentViewer.setAttachment
-         * @function
-         * @param {string} attachmentData - base64-encoded data of file
-         * @param {string} fileName - optional, file name
-         */
-        me.setAttachment = function(attachmentData, fileName)
-        {
+        /**
+        * sets the attachment but does not yet show it
+        *
+        * @name   AttachmentViewer.setAttachment
+        * @function
+        * @param {string} attachmentData - base64-encoded data of file
+        * @param {string} fileName - optional, file name
+        */
+        me.setAttachment = function (attachmentData, fileName) {
             // skip, if attachments got disabled
             if (!$attachmentLink || !$attachmentPreview) return;
 
@@ -2863,8 +2758,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name AttachmentViewer.showAttachment
          * @function
          */
-        me.showAttachment = function()
-        {
+        me.showAttachment = function () {
             // skip, if attachments got disabled
             if (!$attachment || !$attachmentPreview) return;
 
@@ -2884,8 +2778,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name AttachmentViewer.removeAttachment
          * @function
          */
-        me.removeAttachment = function()
-        {
+        me.removeAttachment = function () {
             if (!$attachment.length) {
                 return;
             }
@@ -2908,8 +2801,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name AttachmentViewer.removeAttachmentData
          * @function
          */
-        me.removeAttachmentData = function()
-        {
+        me.removeAttachmentData = function () {
             file = undefined;
             attachmentData = undefined;
         };
@@ -2920,8 +2812,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name AttachmentViewer.clearDragAndDrop
          * @function
          */
-        me.clearDragAndDrop = function()
-        {
+        me.clearDragAndDrop = function () {
             $dragAndDropFileName.text('');
         };
 
@@ -2935,8 +2826,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name AttachmentViewer.hideAttachment
          * @function
          */
-        me.hideAttachment = function()
-        {
+        me.hideAttachment = function () {
             $attachment.addClass('hidden');
         };
 
@@ -2946,8 +2836,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name AttachmentViewer.hideAttachmentPreview
          * @function
          */
-        me.hideAttachmentPreview = function()
-        {
+        me.hideAttachmentPreview = function () {
             if ($attachmentPreview) {
                 $attachmentPreview.addClass('hidden');
             }
@@ -2959,8 +2848,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   AttachmentViewer.hasAttachment
          * @function
          */
-        me.hasAttachment = function()
-        {
+        me.hasAttachment = function () {
             if (!$attachment.length) {
                 return false;
             }
@@ -2976,8 +2864,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   AttachmentViewer.hasAttachmentData
          * @function
          */
-        me.hasAttachmentData = function()
-        {
+        me.hasAttachmentData = function () {
             if ($attachment.length) {
                 return true;
             }
@@ -2991,8 +2878,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @returns {array}
          */
-        me.getAttachment = function()
-        {
+        me.getAttachment = function () {
             return [
                 $attachmentLink.prop('href'),
                 $attachmentLink.prop('download')
@@ -3009,8 +2895,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param {jQuery} $element - the wrapper/container element where this should be moved to
          * @param {string} label - the text to show (%s will be replaced with the file name), will automatically be translated
          */
-        me.moveAttachmentTo = function($element, label)
-        {
+        me.moveAttachmentTo = function ($element, label) {
             // move elemement to new place
             $attachmentLink.appendTo($element);
 
@@ -3089,8 +2974,8 @@ jQuery.PrivateBin = (function($, RawDeflate) {
                             .attr('class', 'img-thumbnail')
 
                             .append($(document.createElement('source'))
-                            .attr('type', mimeType)
-                            .attr('src', blobUrl))
+                                .attr('type', mimeType)
+                                .attr('src', blobUrl))
                     );
                 } else if (mimeType.match(/^audio\//i)) {
                     $targetElement.html(
@@ -3099,8 +2984,8 @@ jQuery.PrivateBin = (function($, RawDeflate) {
                             .attr('autoplay', 'true')
 
                             .append($(document.createElement('source'))
-                            .attr('type', mimeType)
-                            .attr('src', blobUrl))
+                                .attr('type', mimeType)
+                                .attr('src', blobUrl))
                     );
                 } else if (mimeType.match(/\/pdf/i)) {
                     // Fallback for browsers, that don't support the vh unit
@@ -3131,13 +3016,13 @@ jQuery.PrivateBin = (function($, RawDeflate) {
                 return;
             }
 
-            const handleDragEnterOrOver = function(event) {
+            const handleDragEnterOrOver = function (event) {
                 event.stopPropagation();
                 event.preventDefault();
                 return false;
             };
 
-            const handleDrop = function(event) {
+            const handleDrop = function (event) {
                 const evt = event.originalEvent;
                 evt.stopPropagation();
                 evt.preventDefault();
@@ -3159,7 +3044,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
             };
 
             $(document).draghover().on({
-                'draghoverstart': function(e) {
+                'draghoverstart': function (e) {
                     if (TopNav.isAttachmentReadonly()) {
                         e.stopPropagation();
                         e.preventDefault();
@@ -3168,7 +3053,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
                     // show dropzone to indicate drop support
                     $dropzone.removeClass('hidden');
                 },
-                'draghoverend': function() {
+                'draghoverend': function () {
                     $dropzone.addClass('hidden');
                 }
             });
@@ -3257,13 +3142,12 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   AttachmentViewer.init
          * @function
          */
-        me.init = function()
-        {
+        me.init = function () {
             $attachment = $('#attachment');
             $dragAndDropFileName = $('#dragAndDropFileName');
             $dropzone = $('#dropzone');
             $attachmentLink = $('#attachment a') || $('<a>');
-            if($attachment.length) {
+            if ($attachment.length) {
                 $attachmentPreview = $('#attachmentPreview');
 
                 $fileInput = $('#file');
@@ -3300,8 +3184,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @private
          * @function
          */
-        function initTemplates()
-        {
+        function initTemplates() {
             $reply = Model.getTemplate('reply');
             $replyMessage = $reply.find('#replymessage');
             $replyNickname = $reply.find('#nickname');
@@ -3319,8 +3202,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @param  {Event} event
          */
-        function openReply(event)
-        {
+        function openReply(event) {
             const $source = $(event.target);
 
             // clear input
@@ -3348,8 +3230,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {string} alertType
          * @return {bool|jQuery}
          */
-        me.handleNotification = function(alertType)
-        {
+        me.handleNotification = function (alertType) {
             // ignore loading messages
             if (alertType === 'loading') {
                 return false;
@@ -3379,8 +3260,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param {string} commentText
          * @param {string} nickname
          */
-        me.addComment = function(comment, commentText, nickname)
-        {
+        me.addComment = function (comment, commentText, nickname) {
             if (commentText === '') {
                 commentText = 'comment decryption failed';
             }
@@ -3404,19 +3284,19 @@ jQuery.PrivateBin = (function($, RawDeflate) {
 
             // set date
             $commentEntry.find('span.commentdate')
-                      .text(' (' + (new Date(comment.getCreated() * 1000).toLocaleString()) + ')')
-                      .attr('title', 'CommentID: ' + comment.id);
+                .text(' (' + (new Date(comment.getCreated() * 1000).toLocaleString()) + ')')
+                .attr('title', 'CommentID: ' + comment.id);
 
             // if an avatar is available, display it
             const icon = comment.getIcon();
             if (icon) {
                 $commentEntry.find('span.nickname')
-                             .before(
-                                '<img src="' + icon + '" class="vizhash" /> '
-                             );
+                    .before(
+                        '<img src="' + icon + '" class="vizhash" /> '
+                    );
                 $(document).on('languageLoaded', function () {
                     $commentEntry.find('img.vizhash')
-                                 .prop('title', I18n._('Avatar generated from IP address'));
+                        .prop('title', I18n._('Avatar generated from IP address'));
                 });
             }
 
@@ -3441,8 +3321,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   DiscussionViewer.finishDiscussion
          * @function
          */
-        me.finishDiscussion = function()
-        {
+        me.finishDiscussion = function () {
             // add 'add new comment' area
             $commentContainer.append($commentTail);
 
@@ -3457,8 +3336,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   DiscussionViewer.prepareNewDiscussion
          * @function
          */
-        me.prepareNewDiscussion = function()
-        {
+        me.prepareNewDiscussion = function () {
             $commentContainer.html('');
             $discussion.addClass('hidden');
 
@@ -3473,8 +3351,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @return {String}
          */
-        me.getReplyMessage = function()
-        {
+        me.getReplyMessage = function () {
             return $replyMessage.val();
         };
 
@@ -3485,8 +3362,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @return {String}
          */
-        me.getReplyNickname = function()
-        {
+        me.getReplyNickname = function () {
             return $replyNickname.val();
         };
 
@@ -3497,8 +3373,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @return {int|undefined}
          */
-        me.getReplyCommentId = function()
-        {
+        me.getReplyCommentId = function () {
             return replyCommentId;
         };
 
@@ -3510,8 +3385,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param {string} commentId
          * @param {bool} fadeOut - whether to fade out the comment
          */
-        me.highlightComment = function(commentId, fadeOut)
-        {
+        me.highlightComment = function (commentId, fadeOut) {
             const $comment = $('#comment_' + commentId);
             // in case comment does not exist, cancel
             if ($comment.length === 0) {
@@ -3543,8 +3417,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   DiscussionViewer.init
          * @function
          */
-        me.init = function()
-        {
+        me.init = function () {
             // bind events to templates (so they are later cloned)
             $('#commenttailtemplate, #commenttemplate').find('button').on('click', openReply);
             $('#replytemplate').find('button').on('click', PasteEncrypter.sendComment);
@@ -3602,8 +3475,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @param  {Event} event
          */
-        function updateExpiration(event)
-        {
+        function updateExpiration(event) {
             // get selected option
             const target = $(event.target);
 
@@ -3622,8 +3494,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @param  {Event} event
          */
-        function updateFormat(event)
-        {
+        function updateFormat(event) {
             // get selected option
             const $target = $(event.target);
 
@@ -3647,8 +3518,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @private
          * @function
          */
-        function changeBurnAfterReading()
-        {
+        function changeBurnAfterReading() {
             if ($burnAfterReading.is(':checked')) {
                 $openDiscussionOption.addClass('buttondisabled');
                 $openDiscussion.prop('checked', false);
@@ -3667,8 +3537,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @private
          * @function
          */
-        function changeOpenDiscussion()
-        {
+        function changeOpenDiscussion() {
             if ($openDiscussion.is(':checked')) {
                 $burnAfterReadingOption.addClass('buttondisabled');
                 $burnAfterReading.prop('checked', false);
@@ -3687,8 +3556,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   TopNav.clearAttachmentInput
          * @function
          */
-        function clearAttachmentInput()
-        {
+        function clearAttachmentInput() {
             // hide UI for selected files
             // our up-to-date jQuery can handle it :)
             $fileWrap.find('input').val('');
@@ -3701,15 +3569,14 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @private
          * @function
          */
-        function rawText()
-        {
+        function rawText() {
             TopNav.hideAllButtons();
             Alert.showLoading('Showing raw text…', 'time');
             let paste = PasteViewer.getText();
 
             // push a new state to allow back navigation with browser back button
             history.pushState(
-                {type: 'raw'},
+                { type: 'raw' },
                 document.title,
                 // recreate paste URL
                 Helper.baseUri() + '?' + Model.getPasteId() + '#' +
@@ -3718,8 +3585,8 @@ jQuery.PrivateBin = (function($, RawDeflate) {
 
             // we use text/html instead of text/plain to avoid a bug when
             // reloading the raw text view (it reverts to type text/html)
-            const $head  = $('head').children().not('noscript, script, link[type="text/css"]'),
-                  newDoc = document.open('text/html', 'replace');
+            const $head = $('head').children().not('noscript, script, link[type="text/css"]'),
+                newDoc = document.open('text/html', 'replace');
             newDoc.write('<!DOCTYPE html><html><head>');
             for (let i = 0; i < $head.length; ++i) {
                 newDoc.write($head[i].outerHTML);
@@ -3742,9 +3609,8 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @private
          * @function
          */
-        function downloadText()
-        {
-            var filename='paste-' + Model.getPasteId() + '.txt';
+        function downloadText() {
+            var filename = 'paste-' + Model.getPasteId() + '.txt';
             var text = PasteViewer.getText();
 
             var element = document.createElement('a');
@@ -3767,8 +3633,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @param  {Event} event
          */
-        function setLanguage(event)
-        {
+        function setLanguage(event) {
             document.cookie = 'lang=' + $(event.target).data('lang') + ';secure';
             UiHelper.reloadHome();
         }
@@ -3780,8 +3645,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @private
          * @function
          */
-        function clickNewPaste()
-        {
+        function clickNewPaste() {
             Controller.hideStatusMessages();
             Controller.newPaste();
         }
@@ -3794,8 +3658,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @param  {Event} event
          */
-        function clickRetryButton(event)
-        {
+        function clickRetryButton(event) {
             retryButtonCallback(event);
         }
 
@@ -3807,8 +3670,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @param  {Event} event
          */
-        function removeAttachment(event)
-        {
+        function removeAttachment(event) {
             // if custom attachment is used, remove it first
             if (!$customAttachment.hasClass('hidden')) {
                 AttachmentViewer.removeAttachment();
@@ -3833,8 +3695,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @private
          * @function
          */
-        function displayQrCode()
-        {
+        function displayQrCode() {
             const qrCanvas = kjua({
                 render: 'canvas',
                 text: window.location.href
@@ -3850,8 +3711,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param {string} expirationDateString
          * @param {bool} isBurnafterreading
          */
-        function templateEmailBody(expirationDateString, isBurnafterreading)
-        {
+        function templateEmailBody(expirationDateString, isBurnafterreading) {
             const EOL = '\n';
             const BULLET = '  - ';
             let emailBody = '';
@@ -3895,8 +3755,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @private
          * @param {string} emailBody
          */
-        function triggerEmailSend(emailBody)
-        {
+        function triggerEmailSend(emailBody) {
             window.open(
                 `mailto:?body=${encodeURIComponent(emailBody)}`,
                 '_self',
@@ -3913,8 +3772,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {Date|null} expirationDate date of expiration
          * @param  {bool} isBurnafterreading whether it is burn after reading
          */
-        function sendEmail(expirationDate, isBurnafterreading)
-        {
+        function sendEmail(expirationDate, isBurnafterreading) {
             const expirationDateRoundedToSecond = new Date(expirationDate);
 
             // round down at least 30 seconds to make up for the delay of request
@@ -3976,8 +3834,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   TopNav.showViewButtons
          * @function
          */
-        me.showViewButtons = function()
-        {
+        me.showViewButtons = function () {
             if (viewButtonsDisplayed) {
                 return;
             }
@@ -3997,8 +3854,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   TopNav.hideViewButtons
          * @function
          */
-        me.hideViewButtons = function()
-        {
+        me.hideViewButtons = function () {
             if (!viewButtonsDisplayed) {
                 return;
             }
@@ -4019,8 +3875,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   TopNav.hideAllButtons
          * @function
          */
-        me.hideAllButtons = function()
-        {
+        me.hideAllButtons = function () {
             me.hideViewButtons();
             me.hideCreateButtons();
         };
@@ -4031,8 +3886,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   TopNav.showCreateButtons
          * @function
          */
-        me.showCreateButtons = function()
-        {
+        me.showCreateButtons = function () {
             if (createButtonsDisplayed) {
                 return;
             }
@@ -4055,8 +3909,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   TopNav.hideCreateButtons
          * @function
          */
-        me.hideCreateButtons = function()
-        {
+        me.hideCreateButtons = function () {
             if (!createButtonsDisplayed) {
                 return;
             }
@@ -4079,8 +3932,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   TopNav.showNewPasteButton
          * @function
          */
-        me.showNewPasteButton = function()
-        {
+        me.showNewPasteButton = function () {
             $newButton.removeClass('hidden');
         };
 
@@ -4090,8 +3942,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   TopNav.showRetryButton
          * @function
          */
-        me.showRetryButton = function()
-        {
+        me.showRetryButton = function () {
             $retryButton.removeClass('hidden');
         }
 
@@ -4101,8 +3952,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   TopNav.hideRetryButton
          * @function
          */
-        me.hideRetryButton = function()
-        {
+        me.hideRetryButton = function () {
             $retryButton.addClass('hidden');
         }
 
@@ -4113,8 +3963,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @param {int|undefined} optionalRemainingTimeInSeconds
          */
-        me.showEmailButton = function(optionalRemainingTimeInSeconds)
-        {
+        me.showEmailButton = function (optionalRemainingTimeInSeconds) {
             try {
                 // we cache expiration date in closure to avoid inaccurate expiration datetime
                 const expirationDate = Helper.calculateExpirationDate(
@@ -4140,8 +3989,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   TopNav.hideEmailButton
          * @function
          */
-        me.hideEmailButton = function()
-        {
+        me.hideEmailButton = function () {
             $emailLink.addClass('hidden');
             $emailLink.off('click.sendEmail');
         }
@@ -4152,8 +4000,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   TopNav.hideCloneButton
          * @function
          */
-        me.hideCloneButton = function()
-        {
+        me.hideCloneButton = function () {
             $cloneButton.addClass('hidden');
         };
 
@@ -4163,8 +4010,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   TopNav.hideRawButton
          * @function
          */
-        me.hideRawButton = function()
-        {
+        me.hideRawButton = function () {
             $rawTextButton.addClass('hidden');
         };
 
@@ -4174,8 +4020,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   TopNav.hideRawButton
          * @function
          */
-        me.hideDownloadButton = function()
-        {
+        me.hideDownloadButton = function () {
             $downloadTextButton.addClass('hidden');
         };
 
@@ -4185,8 +4030,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   TopNav.hideQrCodeButton
          * @function
          */
-        me.hideQrCodeButton = function()
-        {
+        me.hideQrCodeButton = function () {
             $qrCodeLink.addClass('hidden');
         }
 
@@ -4196,8 +4040,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   TopNav.hideBurnAfterReadingButtons
          * @function
          */
-        me.hideBurnAfterReadingButtons = function()
-        {
+        me.hideBurnAfterReadingButtons = function () {
             me.hideCloneButton();
             me.hideQrCodeButton();
             me.hideEmailButton();
@@ -4209,8 +4052,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   TopNav.hideFileSelector
          * @function
          */
-        me.hideFileSelector = function()
-        {
+        me.hideFileSelector = function () {
             $fileWrap.addClass('hidden');
         };
 
@@ -4221,8 +4063,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   TopNav.showCustomAttachment
          * @function
          */
-        me.showCustomAttachment = function()
-        {
+        me.showCustomAttachment = function () {
             $customAttachment.removeClass('hidden');
         };
 
@@ -4232,8 +4073,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name  TopNav.hideCustomAttachment
          * @function
          */
-        me.hideCustomAttachment = function()
-        {
+        me.hideCustomAttachment = function () {
             $customAttachment.addClass('hidden');
             $fileWrap.removeClass('hidden');
         };
@@ -4244,8 +4084,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   TopNav.collapseBar
          * @function
          */
-        me.collapseBar = function()
-        {
+        me.collapseBar = function () {
             if ($('#navbar').attr('aria-expanded') === 'true') {
                 $('.navbar-toggle').click();
             }
@@ -4257,8 +4096,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   TopNav.resetInput
          * @function
          */
-        me.resetInput = function()
-        {
+        me.resetInput = function () {
             clearAttachmentInput();
             $burnAfterReading.prop('checked', burnAfterReadingDefault);
             $openDiscussion.prop('checked', openDiscussionDefault);
@@ -4266,7 +4104,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
             if (burnAfterReadingDefault || !openDiscussionDefault) $burnAfterReadingOption.removeClass('buttondisabled');
 
             pasteExpiration = Model.getExpirationDefault() || pasteExpiration;
-            $('#pasteExpiration>option').each(function() {
+            $('#pasteExpiration>option').each(function () {
                 const $this = $(this);
                 if ($this.val() === pasteExpiration) {
                     $('#pasteExpirationDisplay').text($this.text());
@@ -4281,8 +4119,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @return {int}
          */
-        me.getExpiration = function()
-        {
+        me.getExpiration = function () {
             return pasteExpiration;
         };
 
@@ -4293,8 +4130,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @return {FileList|null}
          */
-        me.getFileList = function()
-        {
+        me.getFileList = function () {
             const $file = $('#file');
 
             // if no file given, return null
@@ -4317,8 +4153,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @return {bool}
          */
-        me.getBurnAfterReading = function()
-        {
+        me.getBurnAfterReading = function () {
             return $burnAfterReading.is(':checked');
         };
 
@@ -4329,8 +4164,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @return {bool}
          */
-        me.getOpenDiscussion = function()
-        {
+        me.getOpenDiscussion = function () {
             return $openDiscussion.is(':checked');
         };
 
@@ -4341,8 +4175,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @return {string}
          */
-        me.getPassword = function()
-        {
+        me.getPassword = function () {
             // when password is disabled $passwordInput.val() will return undefined
             return $passwordInput.val() || '';
         };
@@ -4356,8 +4189,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @return {jQuery}
          */
-        me.getCustomAttachment = function()
-        {
+        me.getCustomAttachment = function () {
             return $customAttachment;
         };
 
@@ -4368,8 +4200,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @param {function} callback
          */
-        me.setRetryCallback = function(callback)
-        {
+        me.setRetryCallback = function (callback) {
             retryButtonCallback = callback;
         }
 
@@ -4379,8 +4210,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name  TopNav.highlightFileupload
          * @function
          */
-        me.highlightFileupload = function()
-        {
+        me.highlightFileupload = function () {
             // visually indicate file uploaded
             const $attachDropdownToggle = $attach.children('.dropdown-toggle');
             if ($attachDropdownToggle.attr('aria-expanded') === 'false') {
@@ -4398,8 +4228,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name    TopNav.setFormat
          * @function
          */
-        me.setFormat = function(format)
-        {
+        me.setFormat = function (format) {
             $formatter.parent().find(`a[data-format="${format}"]`).click();
         }
 
@@ -4410,8 +4239,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @return {bool}
          */
-        me.isAttachmentReadonly = function()
-        {
+        me.isAttachmentReadonly = function () {
             return !createButtonsDisplayed || $attach.hasClass('hidden');
         }
 
@@ -4423,8 +4251,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   TopNav.init
          * @function
          */
-        me.init = function()
-        {
+        me.init = function () {
             $attach = $('#attach');
             $burnAfterReading = $('#burnafterreading');
             $burnAfterReadingOption = $('#burnafterreadingoption');
@@ -4521,7 +4348,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @readonly
          * @enum   {Object}
          */
-        const ajaxHeaders = {'X-Requested-With': 'JSONHttpRequest'};
+        const ajaxHeaders = { 'X-Requested-With': 'JSONHttpRequest' };
 
         /**
          * called after successful upload
@@ -4532,8 +4359,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param {int} status
          * @param {int} result - optional
          */
-        function success(status, result)
-        {
+        function success(status, result) {
             if (successFunc !== null) {
                 // add useful data to result
                 result.encryptionKey = symmetricKey;
@@ -4550,8 +4376,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param {int} status - internal code
          * @param {int} result - original error code
          */
-        function fail(status, result)
-        {
+        function fail(status, result) {
             if (failureFunc !== null) {
                 failureFunc(status, result);
             }
@@ -4563,15 +4388,14 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   ServerInteraction.run
          * @function
          */
-        me.run = function()
-        {
+        me.run = function () {
             let isPost = Object.keys(data).length > 0,
                 ajaxParams = {
                     type: isPost ? 'POST' : 'GET',
                     url: url,
                     headers: ajaxHeaders,
                     dataType: 'json',
-                    success: function(result) {
+                    success: function (result) {
                         if (result.status === 0) {
                             success(0, result);
                         } else if (result.status === 1) {
@@ -4584,7 +4408,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
             if (isPost) {
                 ajaxParams.data = JSON.stringify(data);
             }
-            $.ajax(ajaxParams).fail(function(jqXHR, textStatus, errorThrown) {
+            $.ajax(ajaxParams).fail(function (jqXHR, textStatus, errorThrown) {
                 console.error(textStatus, errorThrown);
                 fail(3, jqXHR);
             });
@@ -4596,8 +4420,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   ServerInteraction.getData
          * @function
          */
-        me.getData = function()
-        {
+        me.getData = function () {
             return data;
         };
 
@@ -4608,8 +4431,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @param {function} newUrl
          */
-        me.setUrl = function(newUrl)
-        {
+        me.setUrl = function (newUrl) {
             url = newUrl;
         };
 
@@ -4624,8 +4446,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param {string} newPassword
          * @param {string} newKey       - optional
          */
-        me.setCryptParameters = function(newPassword, newKey)
-        {
+        me.setCryptParameters = function (newPassword, newKey) {
             password = newPassword;
 
             if (typeof newKey !== 'undefined') {
@@ -4640,8 +4461,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @param {function} func
          */
-        me.setSuccess = function(func)
-        {
+        me.setSuccess = function (func) {
             successFunc = func;
         };
 
@@ -4652,8 +4472,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @param {function} func
          */
-        me.setFailure = function(func)
-        {
+        me.setFailure = function (func) {
             failureFunc = func;
         };
 
@@ -4668,8 +4487,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @return {object}
          */
-        me.prepare = function()
-        {
+        me.prepare = function () {
             // entropy should already be checked!
 
             // reset password
@@ -4693,8 +4511,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @param {object} cipherMessage
          */
-        me.setCipherMessage = async function(cipherMessage)
-        {
+        me.setCipherMessage = async function (cipherMessage) {
             if (
                 symmetricKey === null ||
                 (typeof symmetricKey === 'string' && symmetricKey === '')
@@ -4719,8 +4536,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param {string} index
          * @param {mixed} element
          */
-        me.setUnencryptedData = function(index, element)
-        {
+        me.setUnencryptedData = function (index, element) {
             data[index] = element;
         };
 
@@ -4734,7 +4550,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param {string} doThisThing - a human description of the action, which was tried
          * @return {array}
          */
-        me.parseUploadError = function(status, data, doThisThing) {
+        me.parseUploadError = function (status, data, doThisThing) {
             let errorArray;
 
             switch (status) {
@@ -4783,13 +4599,13 @@ jQuery.PrivateBin = (function($, RawDeflate) {
             Alert.hideMessages();
 
             // show notification
-            const baseUri   = Helper.baseUri() + '?',
-                  url       = baseUri + data.id + '#' + CryptTool.base58encode(data.encryptionKey),
-                  deleteUrl = baseUri + 'pasteid=' + data.id + '&deletetoken=' + data.deletetoken;
+            const baseUri = Helper.baseUri() + '?',
+                url = baseUri + data.id + '#' + CryptTool.base58encode(data.encryptionKey),
+                deleteUrl = baseUri + 'pasteid=' + data.id + '&deletetoken=' + data.deletetoken;
             PasteStatus.createPasteNotification(url, deleteUrl);
 
             // show new URL in browser bar
-            history.pushState({type: 'newpaste'}, document.title, url);
+            history.pushState({ type: 'newpaste' }, document.title, url);
 
             TopNav.showViewButtons();
 
@@ -4834,8 +4650,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @async
          * @function
          */
-        me.sendComment = async function()
-        {
+        me.sendComment = async function () {
             Alert.hideMessages();
             Alert.setCustomHandler(DiscussionViewer.handleNotification);
 
@@ -4845,8 +4660,8 @@ jQuery.PrivateBin = (function($, RawDeflate) {
 
             // get data
             const plainText = DiscussionViewer.getReplyMessage(),
-                  nickname  = DiscussionViewer.getReplyNickname(),
-                  parentid  = DiscussionViewer.getReplyCommentId();
+                nickname = DiscussionViewer.getReplyNickname(),
+                parentid = DiscussionViewer.getReplyCommentId();
 
             // do not send if there is no data
             if (plainText.length === 0) {
@@ -4906,8 +4721,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @async
          * @function
          */
-        me.sendPaste = async function()
-        {
+        me.sendPaste = async function () {
             // hide previous (error) messages
             Controller.hideStatusMessages();
 
@@ -4918,9 +4732,9 @@ jQuery.PrivateBin = (function($, RawDeflate) {
 
             // get data
             const plainText = Editor.getText(),
-                  format    = PasteViewer.getFormat(),
-                  // the methods may return different values if no files are attached (null, undefined or false)
-                  files     = TopNav.getFileList() || AttachmentViewer.getFile() || AttachmentViewer.hasAttachment();
+                format = PasteViewer.getFormat(),
+                // the methods may return different values if no files are attached (null, undefined or false)
+                files = TopNav.getFileList() || AttachmentViewer.getFile() || AttachmentViewer.hasAttachment();
 
             // do not send if there is no data
             if (plainText.length === 0 && !files) {
@@ -4953,7 +4767,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
                 TopNav.getOpenDiscussion() ? 1 : 0,
                 TopNav.getBurnAfterReading() ? 1 : 0
             ]);
-            ServerInteraction.setUnencryptedData('meta', {'expire': TopNav.getExpiration()});
+            ServerInteraction.setUnencryptedData('meta', { 'expire': TopNav.getExpiration() });
 
             // prepare PasteViewer for later preview
             PasteViewer.setText(plainText);
@@ -4994,7 +4808,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
                             }
                         });
                         if (blobData instanceof window.Blob) {
-                            const fileReading = new Promise(function(resolve, reject) {
+                            const fileReading = new Promise(function (resolve, reject) {
                                 const fileReader = new FileReader();
                                 fileReader.onload = function (event) {
                                     resolve(event.target.result);
@@ -5052,8 +4866,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @throws {string}
          * @return {false|string} false, when unsuccessful or string (decrypted data)
          */
-        async function decryptOrPromptPassword(key, password, cipherdata)
-        {
+        async function decryptOrPromptPassword(key, password, cipherdata) {
             // try decryption without password
             const plaindata = await CryptTool.decipher(key, password, cipherdata);
 
@@ -5088,8 +4901,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @throws {string}
          * @return {Promise}
          */
-        async function decryptPaste(paste, key, password)
-        {
+        async function decryptPaste(paste, key, password) {
             let pastePlain = await decryptOrPromptPassword(
                 key, password,
                 paste.getCipherData()
@@ -5143,16 +4955,15 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @param  {string} password
          * @return {Promise}
          */
-        async function decryptComments(paste, key, password)
-        {
+        async function decryptComments(paste, key, password) {
             // remove potential previous discussion
             DiscussionViewer.prepareNewDiscussion();
 
             const commentDecryptionPromises = [];
             // iterate over comments
             for (let i = 0; i < paste.comments.length; ++i) {
-                const comment        = new Comment(paste.comments[i]),
-                      commentPromise = CryptTool.decipher(key, password, comment.getCipherData());
+                const comment = new Comment(paste.comments[i]),
+                    commentPromise = CryptTool.decipher(key, password, comment.getCipherData());
                 paste.comments[i] = comment;
                 if (comment.v > 1) {
                     // version 2 comment
@@ -5160,7 +4971,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
                         commentPromise.then(function (commentJson) {
                             const commentMessage = JSON.parse(commentJson);
                             return [
-                                commentMessage.comment  || '',
+                                commentMessage.comment || '',
                                 commentMessage.nickname || ''
                             ];
                         })
@@ -5198,8 +5009,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @param  {Paste} [paste] - (optional) object including comments to display (items = array with keys ('data','meta'))
          */
-        me.run = function(paste)
-        {
+        me.run = function (paste) {
             Alert.hideMessages();
             Alert.showLoading('Decrypting paste…', 'cloud-download');
 
@@ -5275,8 +5085,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   Controller.hideStatusMessages
          * @function
          */
-        me.hideStatusMessages = function()
-        {
+        me.hideStatusMessages = function () {
             PasteStatus.hideMessages();
             Alert.hideMessages();
         };
@@ -5287,8 +5096,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   Controller.newPaste
          * @function
          */
-        me.newPaste = function()
-        {
+        me.newPaste = function () {
             // Important: This *must not* run Alert.hideMessages() as previous
             // errors from viewing a paste should be shown.
             TopNav.hideAllButtons();
@@ -5310,7 +5118,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
             AttachmentViewer.removeAttachmentData();
 
             Alert.hideLoading();
-            history.pushState({type: 'create'}, document.title, Helper.baseUri());
+            history.pushState({ type: 'create' }, document.title, Helper.baseUri());
 
             // clear discussion
             DiscussionViewer.prepareNewDiscussion();
@@ -5322,8 +5130,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   Controller.showPaste
          * @function
          */
-        me.showPaste = function()
-        {
+        me.showPaste = function () {
             try {
                 Model.getPasteKey();
             } catch (err) {
@@ -5347,8 +5154,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @function
          * @param  {function} callback
          */
-        me.refreshPaste = function(callback)
-        {
+        me.refreshPaste = function (callback) {
             // save window position to restore it later
             const orgPosition = $(window).scrollTop();
 
@@ -5387,8 +5193,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   Controller.clonePaste
          * @function
          */
-        me.clonePaste = function()
-        {
+        me.clonePaste = function () {
             TopNav.collapseBar();
             TopNav.hideAllButtons();
 
@@ -5396,7 +5201,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
             me.hideStatusMessages();
 
             // erase the id and the key in url
-            history.pushState({type: 'clone'}, document.title, Helper.baseUri());
+            history.pushState({ type: 'clone' }, document.title, Helper.baseUri());
 
             if (AttachmentViewer.hasAttachment()) {
                 AttachmentViewer.moveAttachmentTo(
@@ -5440,8 +5245,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   Controller.initZ
          * @function
          */
-        me.initZ = function()
-        {
+        me.initZ = function () {
             z = zlib.catch(function () {
                 if ($('body').data('compression') !== 'none') {
                     Alert.showWarning('Your browser doesn\'t support WebAssembly, used for zlib compression. You can create uncompressed documents, but can\'t read compressed ones.');
@@ -5455,13 +5259,12 @@ jQuery.PrivateBin = (function($, RawDeflate) {
          * @name   Controller.init
          * @function
          */
-        me.init = function()
-        {
+        me.init = function () {
             // first load translations
             I18n.loadTranslations();
 
             // Add a hook to make all links open a new window
-            DOMPurify.addHook('afterSanitizeAttributes', function(node) {
+            DOMPurify.addHook('afterSanitizeAttributes', function (node) {
                 // set all elements owning target to target=_blank
                 if ('target' in node && node.id !== 'pasteurl') {
                     node.setAttribute('target', '_blank');
@@ -5478,7 +5281,7 @@ jQuery.PrivateBin = (function($, RawDeflate) {
             });
 
             // center all modals
-            $('.modal').on('show.bs.modal', function(e) {
+            $('.modal').on('show.bs.modal', function (e) {
                 $(e.target).css({
                     display: 'flex'
                 });
