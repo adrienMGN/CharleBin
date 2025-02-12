@@ -55,4 +55,34 @@ class FilterTest extends TestCase
         $this->assertEquals('1.00 YiB', Filter::formatHumanReadableSize(1024 * $exponent));
         $this->assertEquals('1.21 YiB', Filter::formatHumanReadableSize(1234 * $exponent));
     }
+
+
+
+    public function testFormatHumanReadableHour()
+    {
+        $this->assertEquals('1 hour', Filter::formatHumanReadableTime(3600));
+        $this->assertEquals('2 hours', Filter::formatHumanReadableTime(7200));
+        $this->assertEquals('1.5 hours', Filter::formatHumanReadableTime(5400));
+    }
+
+    public function testFormatHumanReadableDay()
+    {
+        $this->assertEquals('1 day', Filter::formatHumanReadableTime(86400));
+        $this->assertEquals('2 days', Filter::formatHumanReadableTime(172800));
+        $this->assertEquals('1.5 days', Filter::formatHumanReadableTime(129600));
+    }
+
+    public function testFormatHumanReadableYear()
+    {
+        $this->assertEquals('1 year', Filter::formatHumanReadableTime(31536000));
+        $this->assertEquals('2 years', Filter::formatHumanReadableTime(63072000));
+        $this->assertEquals('1.5 years', Filter::formatHumanReadableTime(47304000));
+    }
+
+
+
+
+
+
+
 }
